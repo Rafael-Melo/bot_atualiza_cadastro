@@ -26,7 +26,7 @@ def esperar_evento(imagens, timeout=30):
     inicio = time.time()
     while time.time() - inicio < timeout:
         for nome, img in imagens.items():
-            pos = pyautogui.locateCenterOnScreen(img, confidence=0.8)
+            pos = pyautogui.locateCenterOnScreen(img, confidence=0.9, grayscale=True)
             if pos:
                 return nome, pos
         time.sleep(1)
@@ -71,8 +71,8 @@ def atualizar():
     while parceiro < TOTAL_PARCEIROS:
         print(f"🟢 Processando parceiro {parceiro}/{TOTAL_PARCEIROS}")
 
-        clicar(1130, 110, 10)  # menu
-        clicar(1130, 370, 10)  # atualizar receita
+        clicar(1230, 110, 10)  # menu
+        clicar(1230, 370, 10)  # atualizar receita
         resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
@@ -82,8 +82,8 @@ def atualizar():
         elif resultado == "erro":
             print(f"⚠️ Erro no parceiro {parceiro}, seguindo para o próximo.")
         
-        clicar(1130, 110, 10)  # menu
-        clicar(1130, 345, 10)  # atualizar sefaz
+        clicar(1230, 110, 10)  # menu
+        clicar(1230, 345, 10)  # atualizar sefaz
         resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
