@@ -1,11 +1,17 @@
 import pyautogui
 import time
 import json
+import os
 
 pyautogui.FAILSAFE = True
 
 TOTAL_PARCEIROS = 16584
 ARQUIVO_PROG = "progresso.json"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+IMAGENS = os.path.join(BASE_DIR, "imagens")
+
+REGIAO_POPUP = (350, 250, 660, 260)
 
 def carregar_progresso():
     try:
@@ -26,7 +32,7 @@ def esperar_evento(imagens, timeout=30):
     inicio = time.time()
     while time.time() - inicio < timeout:
         for nome, img in imagens.items():
-            pos = pyautogui.locateCenterOnScreen(img, confidence=0.9, grayscale=True)
+            pos = pyautogui.locateCenterOnScreen(img, confidence=0.6, grayscale=True, region=REGIAO_POPUP)
             if pos:
                 return nome, pos
         time.sleep(1)
@@ -34,8 +40,8 @@ def esperar_evento(imagens, timeout=30):
 
 def tratar_atualizacao(parceiro):
     evento, pos = esperar_evento({
-        "confirmar": "confirmar.png",
-        "erro": "erro.png"
+        "confirmar": os.path.join(IMAGENS, "confirmar.png"),
+        "erro": os.path.join(IMAGENS, "erro.png")
     })
 
     if evento == "confirmar":
@@ -47,7 +53,7 @@ def tratar_atualizacao(parceiro):
         pyautogui.click(pos)
         time.sleep(1)
 
-        fechar = esperar_evento({"fechar": "fechar.png"})[1]
+        fechar = esperar_evento({"fechar": os.path.join(IMAGENS, "fechar.png")})[1]
         if fechar:
             pyautogui.click(fechar)
             time.sleep(1)
@@ -65,14 +71,16 @@ def tratar_atualizacao(parceiro):
         return "timeout"
 
 def atualizar():
+    print(os.path.exists(os.path.join(IMAGENS, "confirmar.png")))
+
     parceiro = carregar_progresso()
     print(f"Iniciando do parceiro {parceiro}")
 
     while parceiro < TOTAL_PARCEIROS:
         print(f"🟢 Processando parceiro {parceiro}/{TOTAL_PARCEIROS}")
 
-        clicar(1230, 110, 10)  # menu
-        clicar(1230, 370, 10)  # atualizar receita
+        clicar(1230, 110, 3)  # menu
+        clicar(1230, 370, 3)  # atualizar receita
         resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
@@ -82,8 +90,8 @@ def atualizar():
         elif resultado == "erro":
             print(f"⚠️ Erro no parceiro {parceiro}, seguindo para o próximo.")
         
-        clicar(1230, 110, 10)  # menu
-        clicar(1230, 345, 10)  # atualizar sefaz
+        clicar(1230, 110, 3)  # menu
+        clicar(1230, 345, 3)  # atualizar sefaz
         resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
