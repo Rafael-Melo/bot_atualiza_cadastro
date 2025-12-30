@@ -32,7 +32,7 @@ def esperar_evento(imagens, timeout=30):
         time.sleep(1)
     return None, None
 
-def tratar_atualizacao():
+def tratar_atualizacao(parceiro):
     evento, pos = esperar_evento({
         "confirmar": "confirmar.png",
         "erro": "erro.png"
@@ -44,7 +44,7 @@ def tratar_atualizacao():
         return "ok"
 
     elif evento == "erro":
-        pyautogui.click(pos)  # clica OK do erro
+        pyautogui.click(pos)
         time.sleep(1)
 
         fechar = esperar_evento({"fechar": "fechar.png"})[1]
@@ -52,10 +52,16 @@ def tratar_atualizacao():
             pyautogui.click(fechar)
             time.sleep(1)
 
+        # 🧾 LOG DO ERRO
+        with open("erros.log", "a", encoding="utf-8") as f:
+            f.write(f"[{time.strftime('%d/%m %H:%M:%S')}] Erro no parceiro {parceiro}\n")
+        
         return "erro"
 
     else:
-        print("❌ Nenhuma resposta detectada")
+        with open("erros.log", "a", encoding="utf-8") as f:
+            f.write(f"[{time.strftime('%d/%m %H:%M:%S')}] TIMEOUT parceiro {parceiro}\n")
+
         return "timeout"
 
 def atualizar():
@@ -67,19 +73,25 @@ def atualizar():
 
         clicar(100, 200, 10)  # menu
         clicar(200, 300, 10)  # atualizar receita
-        resultado = tratar_atualizacao()
+        resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
-            print("⚠️ Timeout na Receita")
+            print("⚠️ Timeout detectado, interrompendo execução.")
             return
+        
+        elif resultado == "erro":
+            print(f"⚠️ Erro no parceiro {parceiro}, seguindo para o próximo.")
         
         clicar(100, 200, 10)  # menu
         clicar(200, 350, 10)  # atualizar sefaz
-        resultado = tratar_atualizacao()
-        
+        resultado = tratar_atualizacao(parceiro)
+
         if resultado == "timeout":
-            print("⚠️ Timeout na Receita")
+            print("⚠️ Timeout detectado, interrompendo execução.")
             return
+        
+        elif resultado == "erro":
+            print(f"⚠️ Erro no parceiro {parceiro}, seguindo para o próximo.")  
         
         parceiro += 1
         salvar_progresso(parceiro)
