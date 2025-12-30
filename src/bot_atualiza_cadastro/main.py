@@ -71,8 +71,8 @@ def atualizar():
     while parceiro < TOTAL_PARCEIROS:
         print(f"🟢 Processando parceiro {parceiro}/{TOTAL_PARCEIROS}")
 
-        clicar(100, 200, 10)  # menu
-        clicar(200, 300, 10)  # atualizar receita
+        clicar(1130, 110, 10)  # menu
+        clicar(1130, 370, 10)  # atualizar receita
         resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
@@ -82,8 +82,8 @@ def atualizar():
         elif resultado == "erro":
             print(f"⚠️ Erro no parceiro {parceiro}, seguindo para o próximo.")
         
-        clicar(100, 200, 10)  # menu
-        clicar(200, 350, 10)  # atualizar sefaz
+        clicar(1130, 110, 10)  # menu
+        clicar(1130, 345, 10)  # atualizar sefaz
         resultado = tratar_atualizacao(parceiro)
 
         if resultado == "timeout":
