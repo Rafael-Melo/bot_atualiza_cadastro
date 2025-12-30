@@ -22,14 +22,15 @@ def clicar(x, y, espera=2):
     pyautogui.click(x, y, duration=1)
     time.sleep(espera)
 
-def esperar_imagem(img, timeout=30):
+def esperar_evento(imagens, timeout=30):
     inicio = time.time()
     while time.time() - inicio < timeout:
-        pos = pyautogui.locateCenterOnScreen(img, confidence=0.8)
-        if pos:
-            return pos
+        for nome, img in imagens.items():
+            pos = pyautogui.locateCenterOnScreen(img, confidence=0.8)
+            if pos:
+                return nome, pos
         time.sleep(1)
-    return None   
+    return None, None
 
 def atualizar():
     parceiro = carregar_progresso()
