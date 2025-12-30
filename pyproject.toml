@@ -1,0 +1,21 @@
+[project]
+name = "bot-atualiza-cadastro"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Rafel-Melo",email = "rafael.vilas@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pyautogui (>=0.9.54,<0.10.0)",
+    "opencv-python (>=4.12.0.88,<5.0.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "bot_atualiza_cadastro", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
