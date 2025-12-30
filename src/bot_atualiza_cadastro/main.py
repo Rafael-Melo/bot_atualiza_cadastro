@@ -32,6 +32,32 @@ def esperar_evento(imagens, timeout=30):
         time.sleep(1)
     return None, None
 
+def tratar_atualizacao():
+    evento, pos = esperar_evento({
+        "confirmar": "confirmar.png",
+        "erro": "erro.png"
+    })
+
+    if evento == "confirmar":
+        pyautogui.click(pos)
+        time.sleep(2)
+        return "ok"
+
+    elif evento == "erro":
+        pyautogui.click(pos)  # clica OK do erro
+        time.sleep(1)
+
+        fechar = esperar_evento({"fechar": "fechar.png"})[1]
+        if fechar:
+            pyautogui.click(fechar)
+            time.sleep(1)
+
+        return "erro"
+
+    else:
+        print("❌ Nenhuma resposta detectada")
+        return "timeout"
+
 def atualizar():
     parceiro = carregar_progresso()
     print(f"Iniciando do parceiro {parceiro}")
@@ -41,7 +67,7 @@ def atualizar():
 
         clicar(100, 200, 10)  # menu
         clicar(200, 300, 10)  # atualizar receita
-        botao = esperar_imagem("confirmar.png")
+        botao = esperar_evento("confirmar.png")
         if botao:
             pyautogui.click(botao)
         else:
@@ -49,7 +75,7 @@ def atualizar():
             return
         clicar(100, 200, 10)  # menu
         clicar(200, 350, 10)  # atualizar sefaz
-        botao = esperar_imagem("confirmar.png")
+        botao = esperar_evento("confirmar.png")
         if botao:
             pyautogui.click(botao)
         else:
