@@ -67,23 +67,20 @@ def atualizar():
 
         clicar(100, 200, 10)  # menu
         clicar(200, 300, 10)  # atualizar receita
-        botao = esperar_evento("confirmar.png")
-        if botao:
-            pyautogui.click(botao)
-        else:
-            print("❌ Botão não encontrado")
+        resultado = tratar_atualizacao()
+
+        if resultado == "timeout":
+            print("⚠️ Timeout na Receita")
             return
+        
         clicar(100, 200, 10)  # menu
         clicar(200, 350, 10)  # atualizar sefaz
-        botao = esperar_evento("confirmar.png")
-        if botao:
-            pyautogui.click(botao)
-        else:
-            print("❌ Botão não encontrado")
+        resultado = tratar_atualizacao()
+        
+        if resultado == "timeout":
+            print("⚠️ Timeout na Receita")
             return
-        clicar(600, 700, 10)  # salvar
-        clicar(700, 700, 10)  # próximo
-
+        
         parceiro += 1
         salvar_progresso(parceiro)
 
